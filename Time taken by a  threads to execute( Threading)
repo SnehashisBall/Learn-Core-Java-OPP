@@ -1,1 +1,82 @@
+import java.util.Arrays;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
+
+
+class Solution extends Thread {
+         private int[] nums;
+         
+         Solution(int nums[] ){
+             this.nums=nums;
+         }
+    
+         public static int[] nextGreaterElements(int[] nums) {
+            int n=nums.length;
+            int res[]=new int[n];       
+    
+            for(int i=0;i<nums.length;i++){
+                
+                for(int j=(i+1)%n;j<nums.length && i!=j;j=(j+1)%n){
+                    
+                if( nums[i]<nums[j]){
+                    res[i]=nums[j];
+                    break;
+                 }
+                 else{
+                    res[i]=-1;
+                  }
+              }
+          }
+            
+            return res;  
+        }
+        public void run(){
+            
+        long start=System.nanoTime();
+        System.out.println("Next greatest number of Circular Array"+ Arrays.toString(Solution.nextGreaterElements(nums)));
+        long duration=(System.nanoTime()-start)/1000000;
+        System.out.print(duration+"ms "+"\n");
+        this.findCpuTime();    
+        
+        }
+        
+        public  void findCpuTime(){
+        ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+        long id = Thread.currentThread().getId();
+        long cpuTime = bean.getThreadCpuTime(id);
+        System.out.println("Thread id:"+Thread.currentThread().getId());
+        System.out.println("CPU time:"+cpuTime);
+            
+        }
+}
+class Main{
+    public static void main(String args[]){
+        
+        int nums[]={5, 4, 3, 2, 1 };
+        
+        try{
+        Solution sample=new Solution(nums);
+        sample.start(); // startes the Thread
+        sample.join();
+        
+        Solution t1=new Solution(nums);
+        t1.start(); // startes the Thread
+        t1.join();     
+
+        Solution t2=new Solution(nums);
+        t2.start(); // startes the Thread
+        t2.join();
+
+        Solution t3=new Solution(nums);
+        t3.start(); // startes the Thread
+        t3.join();      
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+       
+    }
+    }
+      
